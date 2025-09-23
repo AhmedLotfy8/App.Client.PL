@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace App.Client.DAL.Data.Configurations {
-    internal class DepartmentConfigurations : IEntityTypeConfiguration<Department> {
+    public class DepartmentConfigurations : IEntityTypeConfiguration<Department> {
       
         public void Configure(EntityTypeBuilder<Department> builder) {
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace App.Client.DAL.Models {
-    internal class Department {
+    public class Department {
     
         public int Id { get; set; }
         public string Code { get; set; }

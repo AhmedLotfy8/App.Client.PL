@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace App.Client.DAL.Data.Contexts {
 
-    internal class AppDbContext : DbContext {
+    public class AppDbContext : DbContext {
 
         public AppDbContext() {
             
