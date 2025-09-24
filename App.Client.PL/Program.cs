@@ -1,3 +1,8 @@
+using App.Client.BLL.Interfaces;
+using App.Client.BLL.Repositories;
+using App.Client.DAL.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
+
 namespace App.Client.PL {
     public class Program {
         public static void Main(string[] args) {
@@ -5,6 +10,12 @@ namespace App.Client.PL {
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentReposoitory>();
+
+            builder.Services.AddDbContext<AppDbContext>(options => {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             var app = builder.Build();
 
