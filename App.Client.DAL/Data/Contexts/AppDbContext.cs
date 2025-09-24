@@ -11,7 +11,7 @@ namespace App.Client.DAL.Data.Contexts {
 
     public class AppDbContext : DbContext {
 
-        public AppDbContext() {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {
             
         }
 
@@ -22,12 +22,9 @@ namespace App.Client.DAL.Data.Contexts {
             base.OnModelCreating(modelBuilder);
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            
-            optionsBuilder.UseSqlServer("Server = .; Database = App02; Trusted_Connection = True; TrustServerCertificate = True");
-
-
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {            
+        //    optionsBuilder.UseSqlServer("Server = .; Database = App02; Trusted_Connection = True; TrustServerCertificate = True");
+        //}
 
 
         public DbSet<Department> Departments { get; set; }

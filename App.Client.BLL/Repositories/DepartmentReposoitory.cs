@@ -12,8 +12,8 @@ namespace App.Client.BLL.Repositories {
 
         private readonly AppDbContext _context;
 
-        public DepartmentReposoitory() {
-            _context = new AppDbContext();
+        public DepartmentReposoitory(AppDbContext context) {
+            _context = context;
         }
 
         public IEnumerable<Department> GetAll() {
