@@ -1,15 +1,15 @@
-﻿@model IEnumerable<Department>
+﻿@model IEnumerable<Employee>
 
 @{
 	ViewData["Title"] = "Index";
 }
 
-<h1>All Department</h1>
+<h1>All Employee</h1>
 
 <br />
 <br />
 
-<a asp-action="Create" asp-controller="Department" class="btn btn-primary">Create Department </a>
+<a asp-action="Create" class="btn btn-primary">Create Employee </a>
 
 <br />
 <br />
@@ -22,8 +22,16 @@
 
 			<tr>
 
-				<th>Code</th>
 				<th>Name</th>
+				<th>Age</th>
+				<th>Email</th>
+				<th>Address</th>
+				<th>Phone</th>
+				<th>Salary</th>
+				<th>IsActive</th>
+				<th>IsDeleted</th>
+				<th>@Html.DisplayNameFor(e => e.HiringDate)</th>
+				<th>@Html.DisplayNameFor(e => e.CreateAt)</th>
 				<th>Date of Creation</th>
 				<th>Details</th>
 				<th>Update</th>
@@ -37,9 +45,16 @@
 
 			@foreach (var item in Model) {
 				<tr>
-					<td>@item.Code</td>
 					<td>@item.Name</td>
-					<td>@item.CreateAt/td>
+					<td>@item.Age</td>
+					<td>@item.Email</td>
+					<td>@item.Address</td>
+					<td>@item.Phone</td>
+					<td>@item.Salary</td>
+					<td>@item.isActive</td>
+					<td>@item.isDeleted</td>
+					<td>@item.HiringDate</td>
+					<td>@item.CreateAt</td>
 					<td>
 						<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-warning"> Details</a>
 					</td>
@@ -66,7 +81,7 @@
 else {
 	<div class="mt-4 alert alert-warning">
 		<h4>
-			There are no Departments
+			There are no Employees
 		</h4>
 	</div>
 }

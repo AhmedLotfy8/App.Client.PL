@@ -4,18 +4,18 @@ using App.Client.PL.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.Client.PL.Controllers {
-    public class DepartmentController : Controller {
+    public class EmployeeController : Controller {
 
-        private readonly IDepartmentRepository _departmentReposoitory;
+        private readonly IEmployeeRepository _employeeReposoitory;
 
-        public DepartmentController(IDepartmentRepository departmentReposoitory) {
-            _departmentReposoitory = departmentReposoitory;
+        public EmployeeController(IEmployeeRepository employeeRepository) {
+            _employeeReposoitory = employeeRepository;
         }
 
         [HttpGet]
         public IActionResult Index() {
-            var departments = _departmentReposoitory.GetAll();
-            return View(departments);
+            var employees = _employeeReposoitory.GetAll();
+            return View(employees);
         }
 
         [HttpGet]
@@ -24,16 +24,22 @@ namespace App.Client.PL.Controllers {
         }
 
         [HttpPost]
-        public IActionResult Create(CreateDepartmentDto model) {
+        public IActionResult Create(CreateEmployeeDto model) {
 
             if (ModelState.IsValid) {
-                var department = new Department() {
-                    Code = model.Code,
+                var employee = new Employee() {
                     Name = model.Name,
+                    Address = model.Address,
+                    Age = model.Age,
+                    HiringDate = model.HiringDate,
+                    Email = model.Email,
+                    isActive = model.isActive,
+                    Salary = model.Salary,
+                    isDeleted = model.isDeleted,
                     CreateAt = model.CreateAt
                 };
 
-                var count = _departmentReposoitory.Add(department);
+                var count = _employeeReposoitory.Add(employee);
 
                 if (count > 0) {
                     return RedirectToAction(nameof(Index));
@@ -49,10 +55,10 @@ namespace App.Client.PL.Controllers {
 
             if (id is null) return BadRequest("Invalid Id");
 
-            var department = _departmentReposoitory.Get(id.Value);
-            if (department == null) return NotFound(new { StatusCode = 404, message = $"Department with :{id} id is not found" });
+            var employee = _employeeReposoitory.Get(id.Value);
+            if (employee == null) return NotFound(new { StatusCode = 404, message = $"Employee with :{id} id is not found" });
 
-            return View(viewName, department);
+            return View(viewName, employee);
 
 
         }
@@ -67,20 +73,20 @@ namespace App.Client.PL.Controllers {
 
 
 
-            return Details(id,"Edit");
+            return Details(id, "Edit");
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, Department model) {
+        public IActionResult Edit([FromRoute] int id, Employee model) {
 
 
             if (ModelState.IsValid) {
 
                 if (id != model.Id) return BadRequest();
 
-                var count = _departmentReposoitory.Update(model);
+                var count = _employeeReposoitory.Update(model);
                 if (count > 0) {
                     return Redirect(nameof(Index));
                 }
@@ -135,14 +141,14 @@ namespace App.Client.PL.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute] int id, Department model) {
+        public IActionResult Delete([FromRoute] int id, Employee model) {
 
 
             if (ModelState.IsValid) {
 
                 if (id != model.Id) return BadRequest();
 
-                var count = _departmentReposoitory.Delete(model);
+                var count = _employeeReposoitory.Delete(model);
                 if (count > 0) {
                     return Redirect(nameof(Index));
                 }
@@ -155,5 +161,4 @@ namespace App.Client.PL.Controllers {
 
 
     }
-
 }
