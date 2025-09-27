@@ -66,27 +66,53 @@ namespace App.Client.PL.Controllers {
         [HttpGet]
         public IActionResult Edit(int? id) {
 
-            //if (id is null) return BadRequest("Invalid Id");
+            if (id is null) return BadRequest("Invalid Id");
 
-            //var department = _departmentReposoitory.Get(id.Value);
-            //if (department == null) return NotFound(new { StatusCode = 404, message = $"Department with :{id} id is not found" });
+            var employee = _employeeReposoitory.Get(id.Value);
+            if (employee == null) return NotFound(new { StatusCode = 404, message = $"Department with :{id} id is not found" });
+
+            var employeeDto = new CreateEmployeeDto() {
+                Name = employee.Name,
+                Address = employee.Address,
+                Age = employee.Age,
+                CreateAt = employee.CreateAt,
+                HiringDate = employee.HiringDate,
+                Email = employee.Email,
+                isActive = employee.isActive,
+                isDeleted = employee.isDeleted,
+                Phone = employee.Phone,
+                Salary = employee.Salary,
+            };
 
 
-
-            return Details(id, "Edit");
+            return View(employeeDto);
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, Employee model) {
+        public IActionResult Edit([FromRoute] int id, CreateEmployeeDto model) {
 
 
             if (ModelState.IsValid) {
 
-                if (id != model.Id) return BadRequest();
+                //if (id != model.Id) return BadRequest();
 
-                var count = _employeeReposoitory.Update(model);
+
+                var employee = new Employee() {
+                    Id = id,
+                    Name = model.Name,
+                    Address = model.Address,
+                    Age = model.Age,
+                    HiringDate = model.HiringDate,
+                    Email = model.Email,
+                    isActive = model.isActive,
+                    Salary = model.Salary,
+                    isDeleted = model.isDeleted,
+                    CreateAt = model.CreateAt
+                };
+
+                var count = _employeeReposoitory.Update(employee);
                 if (count > 0) {
                     return Redirect(nameof(Index));
                 }
