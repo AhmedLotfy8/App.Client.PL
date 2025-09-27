@@ -8,37 +8,40 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace App.Client.BLL.Repositories {
-    public class EmployeeRepository : IEmployeeRepository {
-     
-        private readonly AppDbContext _context;
+    public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository {
 
-        public EmployeeRepository(AppDbContext context) {
-            _context = context;
+        public EmployeeRepository(AppDbContext context) : base(context) {
+            
         }
 
-        public IEnumerable<Employee> GetAll() {
-            return _context.Employees.ToList();
-        }
+        //private readonly AppDbContext _context;
 
-        public Employee? Get(int id) {
-            return _context.Employees.Find(id);
-        }
+        //public EmployeeRepository(AppDbContext context) {
+        //    _context = context;
+        //}
 
-        public int Add(Employee model) {
-            _context.Employees.Add(model);
-            return _context.SaveChanges();
-        }
+        //public IEnumerable<Employee> GetAll() {
+        //    return _context.Employees.ToList();
+        //}
 
-        public int Update(Employee model) {
-            _context.Employees.Update(model);
-            return _context.SaveChanges();
-        }
+        //public Employee? Get(int id) {
+        //    return _context.Employees.Find(id);
+        //}
 
-        public int Delete(Employee model) {
-            _context.Employees.Remove(model);
-            return _context.SaveChanges();
-        }
+        //public int Add(Employee model) {
+        //    _context.Employees.Add(model);
+        //    return _context.SaveChanges();
+        //}
 
+        //public int Update(Employee model) {
+        //    _context.Employees.Update(model);
+        //    return _context.SaveChanges();
+        //}
+
+        //public int Delete(Employee model) {
+        //    _context.Employees.Remove(model);
+        //    return _context.SaveChanges();
+        //}
 
     }
 }

@@ -8,36 +8,40 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace App.Client.BLL.Repositories {
-    public class DepartmentReposoitory : IDepartmentRepository {
+    public class DepartmentReposoitory : GenericRepository<Department>, IDepartmentRepository {
 
-        private readonly AppDbContext _context;
+        public DepartmentReposoitory(AppDbContext context) : base(context) {
 
-        public DepartmentReposoitory(AppDbContext context) {
-            _context = context;
         }
 
-        public IEnumerable<Department> GetAll() {
-            return _context.Departments.ToList();
-        }
+        //private readonly AppDbContext _context;
 
-        public Department? Get(int id) {
-            return _context.Departments.Find(id);
-        }
+        //public DepartmentReposoitory(AppDbContext context) {
+        //    _context = context;
+        //}
 
-        public int Add(Department model) {
-            _context.Departments.Add(model);
-            return _context.SaveChanges();
-        }
+        //public IEnumerable<Department> GetAll() {
+        //    return _context.Departments.ToList();
+        //}
 
-        public int Update(Department model) {
-            _context.Departments.Update(model);
-            return _context.SaveChanges();
-        }
+        //public Department? Get(int id) {
+        //    return _context.Departments.Find(id);
+        //}
 
-        public int Delete(Department model) {
-            _context.Departments.Remove(model);
-            return _context.SaveChanges();
-        }
+        //public int Add(Department model) {
+        //    _context.Departments.Add(model);
+        //    return _context.SaveChanges();
+        //}
+
+        //public int Update(Department model) {
+        //    _context.Departments.Update(model);
+        //    return _context.SaveChanges();
+        //}
+
+        //public int Delete(Department model) {
+        //    _context.Departments.Remove(model);
+        //    return _context.SaveChanges();
+        //}
 
     }
 }
