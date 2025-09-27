@@ -12,6 +12,7 @@ namespace App.Client.PL {
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<IDepartmentRepository, DepartmentReposoitory>();
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             builder.Services.AddDbContext<AppDbContext>(options => {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
