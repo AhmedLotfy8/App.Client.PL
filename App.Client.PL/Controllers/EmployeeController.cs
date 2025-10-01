@@ -15,6 +15,12 @@ namespace App.Client.PL.Controllers {
         [HttpGet]
         public IActionResult Index() {
             var employees = _employeeReposoitory.GetAll();
+
+
+            //ViewData["Message"] = "Hello from ViewData";
+            //ViewBag.Message = "Hello from viewBag";
+
+
             return View(employees);
         }
 
@@ -42,6 +48,9 @@ namespace App.Client.PL.Controllers {
                 var count = _employeeReposoitory.Add(employee);
 
                 if (count > 0) {
+
+                    TempData["Message"] = "Employee is Created!";
+
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -96,9 +105,6 @@ namespace App.Client.PL.Controllers {
 
             if (ModelState.IsValid) {
 
-                //if (id != model.Id) return BadRequest();
-
-
                 var employee = new Employee() {
                     Id = id,
                     Name = model.Name,
@@ -124,42 +130,8 @@ namespace App.Client.PL.Controllers {
         }
 
 
-        #region //[HttpPost]
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Edit([FromRoute] int id, UpdateDepartmentDto model) {
-
-        //    if (ModelState.IsValid) {
-
-        //        var department = new Department() {
-        //            Id = id,
-        //            Name = model.Name,
-        //            Code = model.Code,
-        //            CreateAt = model.CreateAt,
-        //        };
-
-        //        var count = _departmentReposoitory.Update(department);
-        //        if (count > 0) {
-        //            return Redirect(nameof(Index));
-        //        }
-
-        //    }
-
-        //    return View(model);
-
-        //}
-
-        #endregion
-
-
         [HttpGet]
         public IActionResult Delete(int? id) {
-
-            //if (id is null) return BadRequest("Invalid Id");
-
-            //var department = _departmentReposoitory.Get(id.Value);
-            //if (department == null) return NotFound(new { StatusCode = 404, message = $"Department with :{id} id is not found" });
 
             return Details(id, "Delete");
 

@@ -30,6 +30,5 @@ namespace App.Client.DAL.Models {
         public DateTime CreateAt { get; set; }
 
 
-
     }
 }
