@@ -1,6 +1,7 @@
 using App.Client.BLL.Interfaces;
 using App.Client.BLL.Repositories;
 using App.Client.DAL.Data.Contexts;
+using App.Client.PL.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.Client.PL {
@@ -17,6 +18,11 @@ namespace App.Client.PL {
             builder.Services.AddDbContext<AppDbContext>(options => {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+
+            builder.Services.AddScoped<IScopedService, ScopedService>();
+            builder.Services.AddTransient<ITransentService, TransentService>();
+            builder.Services.AddSingleton<ISingeltonService, SingeltonService>();
 
             var app = builder.Build();
 
