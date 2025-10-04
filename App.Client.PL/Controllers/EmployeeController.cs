@@ -7,9 +7,12 @@ namespace App.Client.PL.Controllers {
     public class EmployeeController : Controller {
 
         private readonly IEmployeeRepository _employeeReposoitory;
+        private readonly IDepartmentRepository _departmentRepository;
 
-        public EmployeeController(IEmployeeRepository employeeRepository) {
+        public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository) {
             _employeeReposoitory = employeeRepository;
+            _departmentRepository = departmentRepository;
+
         }
 
         [HttpGet]
@@ -26,6 +29,9 @@ namespace App.Client.PL.Controllers {
 
         [HttpGet]
         public IActionResult Create() {
+
+            var departments = _departmentRepository.GetAll();
+            ViewData["departments"] = departments;
             return View();
         }
 
@@ -42,7 +48,8 @@ namespace App.Client.PL.Controllers {
                     isActive = model.isActive,
                     Salary = model.Salary,
                     isDeleted = model.isDeleted,
-                    CreateAt = model.CreateAt
+                    CreateAt = model.CreateAt,
+                    DepartmentId = model.DepartmentId,
                 };
 
                 var count = _employeeReposoitory.Add(employee);
@@ -75,26 +82,15 @@ namespace App.Client.PL.Controllers {
         [HttpGet]
         public IActionResult Edit(int? id) {
 
+            var departments = _departmentRepository.GetAll();
+            ViewData["departments"] = departments;
+            
             if (id is null) return BadRequest("Invalid Id");
 
             var employee = _employeeReposoitory.Get(id.Value);
             if (employee == null) return NotFound(new { StatusCode = 404, message = $"Department with :{id} id is not found" });
 
-            var employeeDto = new CreateEmployeeDto() {
-                Name = employee.Name,
-                Address = employee.Address,
-                Age = employee.Age,
-                CreateAt = employee.CreateAt,
-                HiringDate = employee.HiringDate,
-                Email = employee.Email,
-                isActive = employee.isActive,
-                isDeleted = employee.isDeleted,
-                Phone = employee.Phone,
-                Salary = employee.Salary,
-            };
-
-
-            return View(employeeDto);
+            return View(employee);
 
         }
 
