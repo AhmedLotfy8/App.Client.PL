@@ -2,6 +2,7 @@
 using App.Client.DAL.Models;
 using App.Client.PL.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace App.Client.PL.Controllers {
     public class EmployeeController : Controller {
@@ -16,12 +17,17 @@ namespace App.Client.PL.Controllers {
         }
 
         [HttpGet]
-        public IActionResult Index() {
-            var employees = _employeeReposoitory.GetAll();
+        public IActionResult Index(string? SearchInput) {
 
+            IEnumerable<Employee> employees;
 
-            //ViewData["Message"] = "Hello from ViewData";
-            //ViewBag.Message = "Hello from viewBag";
+            if (string.IsNullOrEmpty(SearchInput)) {
+                employees = _employeeReposoitory.GetAll();
+            }
+
+            else {
+                employees = _employeeReposoitory.GetByName(SearchInput);
+            }
 
 
             return View(employees);
@@ -84,7 +90,7 @@ namespace App.Client.PL.Controllers {
 
             var departments = _departmentRepository.GetAll();
             ViewData["departments"] = departments;
-            
+
             if (id is null) return BadRequest("Invalid Id");
 
             var employee = _employeeReposoitory.Get(id.Value);

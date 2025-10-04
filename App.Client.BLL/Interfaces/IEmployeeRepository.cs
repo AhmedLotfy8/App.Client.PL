@@ -8,15 +8,9 @@ using System.Threading.Tasks;
 namespace App.Client.BLL.Interfaces {
     public interface IEmployeeRepository : IGenericRepository<Employee> {
 
-        //IEnumerable<Employee> GetAll();
 
-        //Employee? Get(int id);
+        List<Employee>? GetByName(string name);
 
-        //int Add(Employee model);
-
-        //int Delete(Employee model);
-
-        //int Update(Employee model);
 
 
     }
