@@ -1,6 +1,7 @@
 ﻿using App.Client.BLL.Interfaces;
 using App.Client.DAL.Models;
 using App.Client.PL.Dtos;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -8,14 +9,16 @@ namespace App.Client.PL.Controllers {
     public class EmployeeController : Controller {
 
         private readonly IEmployeeRepository _employeeReposoitory;
-        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IMapper _mapper;
 
-        public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository) {
+        public EmployeeController(
+            IEmployeeRepository employeeRepository,
+            IMapper mapper
+            ) {
             _employeeReposoitory = employeeRepository;
-            _departmentRepository = departmentRepository;
-
+            _mapper = mapper;
         }
-
+        
         [HttpGet]
         public IActionResult Index(string? SearchInput) {
 
@@ -36,8 +39,7 @@ namespace App.Client.PL.Controllers {
         [HttpGet]
         public IActionResult Create() {
 
-            var departments = _departmentRepository.GetAll();
-            ViewData["departments"] = departments;
+
             return View();
         }
 
@@ -45,18 +47,8 @@ namespace App.Client.PL.Controllers {
         public IActionResult Create(CreateEmployeeDto model) {
 
             if (ModelState.IsValid) {
-                var employee = new Employee() {
-                    Name = model.Name,
-                    Address = model.Address,
-                    Age = model.Age,
-                    HiringDate = model.HiringDate,
-                    Email = model.Email,
-                    isActive = model.isActive,
-                    Salary = model.Salary,
-                    isDeleted = model.isDeleted,
-                    CreateAt = model.CreateAt,
-                    DepartmentId = model.DepartmentId,
-                };
+
+                var employee = _mapper.Map<Employee>(model);
 
                 var count = _employeeReposoitory.Add(employee);
 
@@ -79,9 +71,10 @@ namespace App.Client.PL.Controllers {
 
             var employee = _employeeReposoitory.Get(id.Value);
             if (employee == null) return NotFound(new { StatusCode = 404, message = $"Employee with :{id} id is not found" });
+            
+            
 
             return View(viewName, employee);
-
 
         }
 
@@ -96,7 +89,10 @@ namespace App.Client.PL.Controllers {
             var employee = _employeeReposoitory.Get(id.Value);
             if (employee == null) return NotFound(new { StatusCode = 404, message = $"Department with :{id} id is not found" });
 
-            return View(employee);
+            var dto = _mapper.Map<CreateEmployeeDto>(employee);
+
+
+            return View(dto);
 
         }
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Serialization;
+﻿
+using Newtonsoft.Json.Serialization;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -33,7 +34,7 @@ namespace App.Client.PL.Dtos {
         public DateTime HiringDate { get; set; }
 
         [DisplayName("Date of creation")]
-        public DateTime CreateAt { get; set; }
+        public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 
         public int? DepartmentId { get; set; }
 
