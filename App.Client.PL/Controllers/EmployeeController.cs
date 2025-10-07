@@ -7,29 +7,29 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace App.Client.PL.Controllers {
     public class EmployeeController : Controller {
-
-        private readonly IEmployeeRepository _employeeReposoitory;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public EmployeeController(
-            IEmployeeRepository employeeRepository,
-            IMapper mapper
-            ) {
-            _employeeReposoitory = employeeRepository;
+            IUnitOfWork unitOfWork,
+            IMapper mapper) {
+
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
+
         }
-        
+
         [HttpGet]
         public IActionResult Index(string? SearchInput) {
 
             IEnumerable<Employee> employees;
 
             if (string.IsNullOrEmpty(SearchInput)) {
-                employees = _employeeReposoitory.GetAll();
+                employees = _unitOfWork.EmployeeRespository.GetAll();
             }
 
             else {
-                employees = _employeeReposoitory.GetByName(SearchInput);
+                employees = _unitOfWork.EmployeeRespository.GetByName(SearchInput);
             }
 
 
@@ -39,6 +39,8 @@ namespace App.Client.PL.Controllers {
         [HttpGet]
         public IActionResult Create() {
 
+            var departments = _unitOfWork.DepartmentRespository.GetAll();
+            ViewData["departments"] = departments;
 
             return View();
         }
@@ -50,7 +52,8 @@ namespace App.Client.PL.Controllers {
 
                 var employee = _mapper.Map<Employee>(model);
 
-                var count = _employeeReposoitory.Add(employee);
+                _unitOfWork.EmployeeRespository.Add(employee);
+                var count = _unitOfWork.Complete();
 
                 if (count > 0) {
 
@@ -69,10 +72,8 @@ namespace App.Client.PL.Controllers {
 
             if (id is null) return BadRequest("Invalid Id");
 
-            var employee = _employeeReposoitory.Get(id.Value);
+            var employee = _unitOfWork.EmployeeRespository.Get(id.Value);
             if (employee == null) return NotFound(new { StatusCode = 404, message = $"Employee with :{id} id is not found" });
-            
-            
 
             return View(viewName, employee);
 
@@ -81,16 +82,14 @@ namespace App.Client.PL.Controllers {
         [HttpGet]
         public IActionResult Edit(int? id) {
 
-            var departments = _departmentRepository.GetAll();
-            ViewData["departments"] = departments;
-
             if (id is null) return BadRequest("Invalid Id");
 
-            var employee = _employeeReposoitory.Get(id.Value);
+            var employee = _unitOfWork.EmployeeRespository.Get(id.Value);
+            var departments = _unitOfWork.DepartmentRespository.GetAll();
+            ViewData["departments"] = departments;
             if (employee == null) return NotFound(new { StatusCode = 404, message = $"Department with :{id} id is not found" });
 
             var dto = _mapper.Map<CreateEmployeeDto>(employee);
-
 
             return View(dto);
 
@@ -103,20 +102,12 @@ namespace App.Client.PL.Controllers {
 
             if (ModelState.IsValid) {
 
-                var employee = new Employee() {
-                    Id = id,
-                    Name = model.Name,
-                    Address = model.Address,
-                    Age = model.Age,
-                    HiringDate = model.HiringDate,
-                    Email = model.Email,
-                    isActive = model.isActive,
-                    Salary = model.Salary,
-                    isDeleted = model.isDeleted,
-                    CreateAt = model.CreateAt
-                };
+                var employee = _mapper.Map<Employee>(model);
+                employee.Id = id;
 
-                var count = _employeeReposoitory.Update(employee);
+                _unitOfWork.EmployeeRespository.Update(employee);
+                var count = _unitOfWork.Complete();
+
                 if (count > 0) {
                     return Redirect(nameof(Index));
                 }
@@ -144,7 +135,12 @@ namespace App.Client.PL.Controllers {
 
                 if (id != model.Id) return BadRequest();
 
-                var count = _employeeReposoitory.Delete(model);
+                var employee = _mapper.Map<Employee>(model);
+                employee.Id = id;
+
+                _unitOfWork.EmployeeRespository.Delete(model);
+                var count = _unitOfWork.Complete();
+
                 if (count > 0) {
                     return Redirect(nameof(Index));
                 }

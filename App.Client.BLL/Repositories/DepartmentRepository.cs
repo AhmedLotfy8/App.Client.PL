@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace App.Client.BLL.Repositories {
-    public class DepartmentReposoitory : GenericRepository<Department>, IDepartmentRepository {
+    public class DepartmentRepository : GenericRepository<Department>, IDepartmentRepository {
 
-        public DepartmentReposoitory(AppDbContext context) : base(context) {
+        public DepartmentRepository(AppDbContext context) : base(context) {
 
         }
 
