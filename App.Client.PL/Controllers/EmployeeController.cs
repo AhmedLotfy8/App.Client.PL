@@ -1,6 +1,7 @@
 ﻿using App.Client.BLL.Interfaces;
 using App.Client.DAL.Models;
 using App.Client.PL.Dtos;
+using App.Client.PL.Helper;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -49,6 +50,11 @@ namespace App.Client.PL.Controllers {
         public IActionResult Create(CreateEmployeeDto model) {
 
             if (ModelState.IsValid) {
+
+                if (model.Image is not null) {
+
+                    model.ImageName = DocumentSettings.UploadFile(model.Image, "Images");
+                }
 
                 var employee = _mapper.Map<Employee>(model);
 
@@ -102,6 +108,17 @@ namespace App.Client.PL.Controllers {
 
             if (ModelState.IsValid) {
 
+
+                if (model.ImageName is not null && model.Image is not null) {
+                    DocumentSettings.DeleteFile(model.ImageName, "Images");
+
+                }
+
+                if (model.ImageName is not null) {
+                    model.ImageName = DocumentSettings.UploadFile(model.Image, "Images");
+
+                }
+
                 var employee = _mapper.Map<Employee>(model);
                 employee.Id = id;
 
@@ -109,6 +126,7 @@ namespace App.Client.PL.Controllers {
                 var count = _unitOfWork.Complete();
 
                 if (count > 0) {
+
                     return Redirect(nameof(Index));
                 }
 
@@ -142,6 +160,12 @@ namespace App.Client.PL.Controllers {
                 var count = _unitOfWork.Complete();
 
                 if (count > 0) {
+
+                    if (model.ImageName is not null) {
+                        DocumentSettings.DeleteFile(model.ImageName, "Images");
+
+                    }
+
                     return Redirect(nameof(Index));
                 }
 
