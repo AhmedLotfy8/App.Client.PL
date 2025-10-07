@@ -8,6 +8,10 @@ namespace App.Client.PL.Mapping {
         public EmployeeProfile() {
 
             CreateMap<CreateEmployeeDto, Employee>().ReverseMap();
+            CreateMap<Employee, CreateEmployeeDto>();
+                //.ForMember(d => d.DepartmentName,
+                //o => o.MapFrom(s => s.Department.Name));
+
 
 
             // In case there are different variable names
@@ -15,8 +19,8 @@ namespace App.Client.PL.Mapping {
             //    .ForMember(d => d.Name,
             //    o => o.MapFrom(s => s.EmpName));
             //CreateMap<Employee, CreateEmployeeDto>()
-                //.ForMember(e => e.EmpName, o =>
-                //o.MapFrom(s => s.Name));
+            //.ForMember(e => e.EmpName, o =>
+            //o.MapFrom(s => s.Name));
 
 
         }

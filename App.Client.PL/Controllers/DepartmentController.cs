@@ -6,15 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace App.Client.PL.Controllers {
     public class DepartmentController : Controller {
 
-        private readonly IDepartmentRepository _departmentReposoitory;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DepartmentController(IDepartmentRepository departmentReposoitory) {
-            _departmentReposoitory = departmentReposoitory;
+        public DepartmentController(IUnitOfWork unitOfWork) {
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
         public IActionResult Index() {
-            var departments = _departmentReposoitory.GetAll();
+            var departments = _unitOfWork.DepartmentRespository.GetAll();
             return View(departments);
         }
 
@@ -33,7 +33,8 @@ namespace App.Client.PL.Controllers {
                     CreateAt = model.CreateAt
                 };
 
-                var count = _departmentReposoitory.Add(department);
+                _unitOfWork.DepartmentRespository.Add(department);
+                var count = _unitOfWork.Complete();
 
                 if (count > 0) {
                     return RedirectToAction(nameof(Index));
@@ -49,7 +50,7 @@ namespace App.Client.PL.Controllers {
 
             if (id is null) return BadRequest("Invalid Id");
 
-            var department = _departmentReposoitory.Get(id.Value);
+            var department = _unitOfWork.DepartmentRespository.Get(id.Value);
             if (department == null) return NotFound(new { StatusCode = 404, message = $"Department with :{id} id is not found" });
 
             return View(viewName, department);
@@ -71,7 +72,9 @@ namespace App.Client.PL.Controllers {
 
                 if (id != model.Id) return BadRequest();
 
-                var count = _departmentReposoitory.Update(model);
+                _unitOfWork.DepartmentRespository.Update(model);
+                var count = _unitOfWork.Complete();
+
                 if (count > 0) {
                     return Redirect(nameof(Index));
                 }
@@ -98,7 +101,9 @@ namespace App.Client.PL.Controllers {
 
                 if (id != model.Id) return BadRequest();
 
-                var count = _departmentReposoitory.Delete(model);
+                _unitOfWork.DepartmentRespository.Delete(model);
+                var count = _unitOfWork.Complete();
+
                 if (count > 0) {
                     return Redirect(nameof(Index));
                 }

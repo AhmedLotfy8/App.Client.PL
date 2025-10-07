@@ -20,4 +20,8 @@
     <ProjectReference Include="..\App.Client.DAL\App.Client.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Files\Images\" />
+  </ItemGroup>
+
 </Project>

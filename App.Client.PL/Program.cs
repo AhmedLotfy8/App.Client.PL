@@ -1,3 +1,4 @@
+using App.Client.BLL;
 using App.Client.BLL.Interfaces;
 using App.Client.BLL.Repositories;
 using App.Client.DAL.Data.Contexts;
@@ -13,8 +14,10 @@ namespace App.Client.PL {
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentReposoitory>();
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddDbContext<AppDbContext>(options => {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

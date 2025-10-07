@@ -36,6 +36,8 @@ namespace App.Client.PL.Dtos {
         [DisplayName("Date of creation")]
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 
+        public string? DepartmentName { get; set; }
+
         public int? DepartmentId { get; set; }
 
     }
