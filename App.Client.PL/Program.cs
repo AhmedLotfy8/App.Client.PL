@@ -31,7 +31,8 @@ namespace App.Client.PL {
 
 
             builder.Services.AddIdentity<AppUser, IdentityRole>()
-                   .AddEntityFrameworkStores<AppDbContext>();
+                   .AddEntityFrameworkStores<AppDbContext>()
+                   .AddDefaultTokenProviders();
 
 
             builder.Services.ConfigureApplicationCookie(config => {
