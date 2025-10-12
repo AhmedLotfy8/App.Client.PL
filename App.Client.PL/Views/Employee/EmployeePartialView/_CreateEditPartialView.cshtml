@@ -4,7 +4,8 @@
 
 @{
 	// var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department>, "Id", "Name");
-	var Departments = new SelectList(_departmentRepository.GetAll(), "Id", "Name");
+	var departments = await _departmentRepository.GetAllAsync();
+	var Departments = new SelectList(departments, "Id", "Name");
 }
 
 <div class="my-3">

@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace App.Client.BLL.Interfaces {
-    public interface IUnitOfWork : IDisposable {
+    public interface IUnitOfWork : IAsyncDisposable {
 
         public IDepartmentRepository DepartmentRespository { get; }
         public IEmployeeRepository EmployeeRespository { get; }
 
-        int Complete();
+        Task<int> CompleteAsync();
     }
 }
