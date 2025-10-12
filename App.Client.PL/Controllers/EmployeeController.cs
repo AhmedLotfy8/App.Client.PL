@@ -5,6 +5,7 @@ using App.Client.PL.Helper;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Threading.Tasks;
 
 namespace App.Client.PL.Controllers {
     public class EmployeeController : Controller {
@@ -21,16 +22,16 @@ namespace App.Client.PL.Controllers {
         }
 
         [HttpGet]
-        public IActionResult Index(string? SearchInput) {
+        public async Task<IActionResult> Index(string? SearchInput) {
 
             IEnumerable<Employee> employees;
 
             if (string.IsNullOrEmpty(SearchInput)) {
-                employees = _unitOfWork.EmployeeRespository.GetAll();
+                employees = await _unitOfWork.EmployeeRespository.GetAllAsync();
             }
 
             else {
-                employees = _unitOfWork.EmployeeRespository.GetByName(SearchInput);
+                employees = await _unitOfWork.EmployeeRespository.GetByNameAsync(SearchInput);
             }
 
 
@@ -38,16 +39,16 @@ namespace App.Client.PL.Controllers {
         }
 
         [HttpGet]
-        public IActionResult Create() {
+        public async Task<IActionResult> Create() {
 
-            var departments = _unitOfWork.DepartmentRespository.GetAll();
+            var departments = await _unitOfWork.DepartmentRespository.GetAllAsync();
             ViewData["departments"] = departments;
 
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(CreateEmployeeDto model) {
+        public async Task<IActionResult> Create(CreateEmployeeDto model) {
 
             if (ModelState.IsValid) {
 
@@ -58,8 +59,8 @@ namespace App.Client.PL.Controllers {
 
                 var employee = _mapper.Map<Employee>(model);
 
-                _unitOfWork.EmployeeRespository.Add(employee);
-                var count = _unitOfWork.Complete();
+                await _unitOfWork.EmployeeRespository.AddAsync(employee);
+                var count = await _unitOfWork.CompleteAsync();
 
                 if (count > 0) {
 
@@ -74,11 +75,11 @@ namespace App.Client.PL.Controllers {
         }
 
         [HttpGet]
-        public IActionResult Details(int? id, string viewName = "Details") {
+        public async Task<IActionResult> Details(int? id, string viewName = "Details") {
 
             if (id is null) return BadRequest("Invalid Id");
 
-            var employee = _unitOfWork.EmployeeRespository.Get(id.Value);
+            var employee = await _unitOfWork.EmployeeRespository.GetAsync(id.Value);
             if (employee == null) return NotFound(new { StatusCode = 404, message = $"Employee with :{id} id is not found" });
 
             return View(viewName, employee);
@@ -86,12 +87,12 @@ namespace App.Client.PL.Controllers {
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id) {
+        public async Task<IActionResult> Edit(int? id) {
 
             if (id is null) return BadRequest("Invalid Id");
 
-            var employee = _unitOfWork.EmployeeRespository.Get(id.Value);
-            var departments = _unitOfWork.DepartmentRespository.GetAll();
+            var employee = await _unitOfWork.EmployeeRespository.GetAsync(id.Value);
+            var departments = await _unitOfWork.DepartmentRespository.GetAllAsync();
             ViewData["departments"] = departments;
             if (employee == null) return NotFound(new { StatusCode = 404, message = $"Department with :{id} id is not found" });
 
@@ -103,7 +104,7 @@ namespace App.Client.PL.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, CreateEmployeeDto model) {
+        public async Task<IActionResult> Edit([FromRoute] int id, CreateEmployeeDto model) {
 
 
             if (ModelState.IsValid) {
@@ -123,7 +124,7 @@ namespace App.Client.PL.Controllers {
                 employee.Id = id;
 
                 _unitOfWork.EmployeeRespository.Update(employee);
-                var count = _unitOfWork.Complete();
+                var count = await _unitOfWork.CompleteAsync();
 
                 if (count > 0) {
 
@@ -138,15 +139,15 @@ namespace App.Client.PL.Controllers {
 
 
         [HttpGet]
-        public IActionResult Delete(int? id) {
+        public async Task<IActionResult> Delete(int? id) {
 
-            return Details(id, "Delete");
+            return await Details(id, "Delete");
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute] int id, Employee model) {
+        public async Task<IActionResult> Delete([FromRoute] int id, Employee model) {
 
 
             if (ModelState.IsValid) {
@@ -157,7 +158,7 @@ namespace App.Client.PL.Controllers {
                 employee.Id = id;
 
                 _unitOfWork.EmployeeRespository.Delete(model);
-                var count = _unitOfWork.Complete();
+                var count = await _unitOfWork.CompleteAsync();
 
                 if (count > 0) {
 
