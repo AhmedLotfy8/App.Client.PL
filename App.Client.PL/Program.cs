@@ -22,14 +22,17 @@ namespace App.Client.PL {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            builder.Services.AddAutoMapper(m => m.AddProfile(new EmployeeProfile()));
 
             builder.Services.AddScoped<IScopedService, ScopedService>();
             builder.Services.AddTransient<ITransentService, TransentService>();
             builder.Services.AddSingleton<ISingeltonService, SingeltonService>();
 
+            builder.Services.AddAutoMapper(m => m.AddProfile(new EmployeeProfile()));
+
+
             builder.Services.AddIdentity<AppUser, IdentityRole>()
                    .AddEntityFrameworkStores<AppDbContext>();
+
 
             var app = builder.Build();
 
