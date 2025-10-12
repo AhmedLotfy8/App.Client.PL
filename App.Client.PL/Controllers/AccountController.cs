@@ -1,5 +1,6 @@
 ﻿using App.Client.DAL.Models;
 using App.Client.PL.Dtos;
+using App.Client.PL.Helper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -123,6 +124,61 @@ namespace App.Client.PL.Controllers {
 
         #endregion
 
+
+        #region Forget password
+
+        [HttpGet]
+        public IActionResult ForgetPassword() {
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendResetPasswordUrl(ForgetPasswordDto model) {
+
+            if (ModelState.IsValid) {
+
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user is not null) {
+
+
+
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                    //                https://localhost:44382/Account/SignIn
+
+                    var url = Url.Action("ResetPassword", "Account", new {email = model.Email, token}, Request.Scheme);
+
+
+                    var email = new Email() {
+                        To = model.Email,
+                        Subject = "Reset Password",
+                        Body = url,
+                    };
+
+                    var flag = EmailSettings.SendEmail(email);
+
+
+                    if (flag) {
+
+
+
+                    }
+
+
+
+
+                }
+
+            }
+
+            ModelState.AddModelError("", "Invalid Reset Password operation!");
+            return View("ForgetPassword", model);
+
+        }
+
+        #endregion
 
     }
 }
