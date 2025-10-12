@@ -34,6 +34,12 @@ namespace App.Client.PL {
                    .AddEntityFrameworkStores<AppDbContext>();
 
 
+            builder.Services.ConfigureApplicationCookie(config => {
+
+                config.LoginPath = "/Account/SignIn";
+
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -47,6 +53,9 @@ namespace App.Client.PL {
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",

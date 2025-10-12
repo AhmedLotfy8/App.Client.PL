@@ -2,9 +2,13 @@ using System.Diagnostics;
 using System.Text;
 using App.Client.PL.Models;
 using App.Client.PL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.Client.PL.Controllers {
+
+
+    [Authorize]
     public class HomeController : Controller {
         private readonly ILogger<HomeController> _logger;
         private readonly IScopedService scopedService1;

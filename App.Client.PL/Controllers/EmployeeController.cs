@@ -3,11 +3,14 @@ using App.Client.DAL.Models;
 using App.Client.PL.Dtos;
 using App.Client.PL.Helper;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
 
 namespace App.Client.PL.Controllers {
+
+    [Authorize]
     public class EmployeeController : Controller {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
