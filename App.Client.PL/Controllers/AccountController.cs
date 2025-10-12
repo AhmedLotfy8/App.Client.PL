@@ -158,16 +158,12 @@ namespace App.Client.PL.Controllers {
                     };
 
                     var flag = EmailSettings.SendEmail(email);
-
-
                     if (flag) {
 
+                        return RedirectToAction("CheckYourInbox");
 
 
                     }
-
-
-
 
                 }
 
@@ -175,6 +171,13 @@ namespace App.Client.PL.Controllers {
 
             ModelState.AddModelError("", "Invalid Reset Password operation!");
             return View("ForgetPassword", model);
+
+        }
+
+        [HttpGet]
+        public IActionResult CheckYourInbox() {
+
+            return View();
 
         }
 
