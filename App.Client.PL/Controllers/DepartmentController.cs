@@ -1,10 +1,13 @@
 ﻿using App.Client.BLL.Interfaces;
 using App.Client.DAL.Models;
 using App.Client.PL.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace App.Client.PL.Controllers {
+
+    [Authorize]
     public class DepartmentController : Controller {
 
         private readonly IUnitOfWork _unitOfWork;

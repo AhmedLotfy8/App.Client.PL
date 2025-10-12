@@ -8,11 +8,15 @@ namespace App.Client.PL.Controllers {
     public class AccountController : Controller {
 
         private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(UserManager<AppUser> userManager) {
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager) {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
+
+        #region SignUp
 
         [HttpGet]
         public IActionResult SignUp() {
@@ -21,7 +25,6 @@ namespace App.Client.PL.Controllers {
             return View();
 
         }
-
 
         [HttpPost]
         public async Task<IActionResult> SignUp(SignUpDto model) {
@@ -66,6 +69,60 @@ namespace App.Client.PL.Controllers {
             return View(model);
 
         }
+
+        #endregion
+
+
+
+        #region SignIn
+
+
+        [HttpGet]
+        public IActionResult SignIn() {
+
+            return View();
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SignIn(SignInDto model) {
+
+
+            if (ModelState.IsValid) {
+
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user is not null) {
+
+                    var flag = await _userManager.CheckPasswordAsync(user, model.Password);
+
+                    if (flag) {
+
+
+                        var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
+
+                        if (result.Succeeded) {
+
+                            return RedirectToAction(nameof(HomeController.Index), "Home");
+
+                        }
+
+                    }
+
+                }
+
+
+                ModelState.AddModelError("", "Invalid login!");
+
+            }
+
+            return View(model);
+
+        }
+
+
+        #endregion
+
 
     }
 }
