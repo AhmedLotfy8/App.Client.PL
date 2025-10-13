@@ -85,23 +85,30 @@ namespace App.Client.PL.Controllers {
             var employee = await _unitOfWork.EmployeeRespository.GetAsync(id.Value);
             if (employee == null) return NotFound(new { StatusCode = 404, message = $"Employee with :{id} id is not found" });
 
-            return View(viewName, employee);
+            var dto = _mapper.Map<CreateEmployeeDto>(employee);
+
+            return View(viewName, dto);
 
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int? id) {
 
-            if (id is null) return BadRequest("Invalid Id");
+            // !!!!!!!!!!!!!!!!!!!!! Old Code !!!!!!!!!!!!!!!!!!!!!
 
-            var employee = await _unitOfWork.EmployeeRespository.GetAsync(id.Value);
+            //if (id is null) return BadRequest("Invalid Id");
+            //var employee = await _unitOfWork.EmployeeRespository.GetAsync(id.Value);
+            //var departments = await _unitOfWork.DepartmentRespository.GetAllAsync();
+            //ViewData["departments"] = departments;
+            //if (employee == null) return NotFound(new { StatusCode = 404, message = $"Department with :{id} id is not found" });
+            //var dto = _mapper.Map<CreateEmployeeDto>(employee);
+            //return View(dto);
+
+
+
             var departments = await _unitOfWork.DepartmentRespository.GetAllAsync();
             ViewData["departments"] = departments;
-            if (employee == null) return NotFound(new { StatusCode = 404, message = $"Department with :{id} id is not found" });
-
-            var dto = _mapper.Map<CreateEmployeeDto>(employee);
-
-            return View(dto);
+            return await Details(id, "Edit");
 
         }
 
@@ -131,7 +138,7 @@ namespace App.Client.PL.Controllers {
 
                 if (count > 0) {
 
-                    return Redirect(nameof(Index));
+                    return RedirectToAction(nameof(Index));
                 }
 
             }
@@ -148,29 +155,29 @@ namespace App.Client.PL.Controllers {
 
         }
 
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete([FromRoute] int id, Employee model) {
+        public async Task<IActionResult> Delete([FromRoute] int id, CreateEmployeeDto model) {
 
 
             if (ModelState.IsValid) {
 
-                if (id != model.Id) return BadRequest();
 
                 var employee = _mapper.Map<Employee>(model);
                 employee.Id = id;
 
-                _unitOfWork.EmployeeRespository.Delete(model);
+                _unitOfWork.EmployeeRespository.Delete(employee);
                 var count = await _unitOfWork.CompleteAsync();
 
                 if (count > 0) {
 
                     if (model.ImageName is not null) {
                         DocumentSettings.DeleteFile(model.ImageName, "Images");
-
                     }
 
-                    return Redirect(nameof(Index));
+                    return RedirectToAction(nameof(Index));
                 }
 
             }
@@ -178,6 +185,44 @@ namespace App.Client.PL.Controllers {
             return View(model);
 
         }
+
+
+
+        // !!!!!!!!!!!!!!!!!!!!! Old Code !!!!!!!!!!!!!!!!!!!!!
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Delete([FromRoute] int id, Employee model) {
+
+
+        //    if (ModelState.IsValid) {
+
+        //        if (id != model.Id) return BadRequest();
+
+        //        var employee = _mapper.Map<Employee>(model);
+        //        employee.Id = id;
+
+        //        _unitOfWork.EmployeeRespository.Delete(model);
+        //        var count = await _unitOfWork.CompleteAsync();
+
+        //        if (count > 0) {
+
+        //            if (model.ImageName is not null) {
+        //                DocumentSettings.DeleteFile(model.ImageName, "Images");
+
+        //            }
+
+        //            return RedirectToAction(nameof(Index));
+        //        }
+
+        //    }
+
+        //    return View(model);
+
+        //}
+
+
+
 
 
     }

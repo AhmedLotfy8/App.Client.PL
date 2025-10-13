@@ -102,18 +102,8 @@
 					<td>@item.isDeleted</td>
 					<td>@item.HiringDate</td>
 					<td>@item.CreateAt</td>
-					@{
-						if (item.Department is null) {
-							<td>No department </td>
-						}
-
-						else {
-							<td>@item.Department.Name</td>
-						}
-					}
-
-					<partial name="_ButtonPartialView" model="@item.Id" />
-
+					<td>@item.Department?.Name</td>
+					<partial name="_ButtonPartialView" model="@item.Id.ToString()" />
 
 				</tr>
 

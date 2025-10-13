@@ -1,11 +1,15 @@
 ﻿@model CreateEmployeeDto
 
-@inject IDepartmentRepository _departmentRepository
+@* @inject IDepartmentRepository _departmentRepository *@
 
 @{
+
+	var departments = new SelectList(ViewData["departments"] as IEnumerable<Department>, nameof(Department.Id), nameof(Department.Name));
+
+	// !!!!!!!!!!!!!!!!!!! Old Code !!!!!!!!!!!!!!!!!!!
 	// var Departments = new SelectList(ViewData["departments"] as IEnumerable<Department>, "Id", "Name");
-	var departments = await _departmentRepository.GetAllAsync();
-	var Departments = new SelectList(departments, "Id", "Name");
+	// var departments = await _departmentRepository.GetAllAsync();
+	//// var Departments = new SelectList(departments, "Id", "Name");
 }
 
 <div class="my-3">
@@ -70,7 +74,7 @@
 
 <div class="my-3">
 	<label asp-for="DepartmentId" class="col-form-label"></label>
-	<select asp-for="DepartmentId" asp-items="Departments" class="form-control">
+	<select asp-for="DepartmentId" asp-items="departments" class="form-control">
 		<option value="@null"> select Department </option>
 	</select>
 </div>
