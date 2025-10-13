@@ -148,7 +148,7 @@ namespace App.Client.PL.Controllers {
 
                     //                https://localhost:44382/Account/SignIn
 
-                    var url = Url.Action("ResetPassword", "Account", new {email = model.Email, token}, Request.Scheme);
+                    var url = Url.Action("ResetPassword", "Account", new { email = model.Email, token }, Request.Scheme);
 
 
                     var email = new Email() {
@@ -180,6 +180,56 @@ namespace App.Client.PL.Controllers {
             return View();
 
         }
+
+        #endregion
+
+
+        #region Reset password
+
+        [HttpGet]
+        public IActionResult ResetPassword(string email, string token) {
+
+            TempData["email"] = email;
+            TempData["token"] = token;
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto model) {
+
+            if (ModelState.IsValid) {
+
+                var email = TempData["email"] as string;
+                var token = TempData["token"] as string;
+
+                if (email is null || token is null) {
+
+                    return BadRequest("Invalid operation");
+                }
+
+                var user = await _userManager.FindByEmailAsync(email);
+
+                if (user is not null) {
+                    var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+
+                    if (result.Succeeded) {
+                        RedirectToAction("SignIn");
+                    }
+
+                }
+
+                ModelState.AddModelError("", "Invalid reset password operation");
+
+
+            }
+
+            return View();
+
+        }
+
+
+
 
         #endregion
 
