@@ -51,7 +51,6 @@ namespace App.Client.PL.Controllers {
         }
 
 
-
         [HttpGet]
         public async Task<IActionResult> Details(string? id, string viewName = "Details") {
 
@@ -72,8 +71,6 @@ namespace App.Client.PL.Controllers {
             return View(viewName, dto);
 
         }
-
-
 
 
         [HttpGet]
@@ -144,11 +141,6 @@ namespace App.Client.PL.Controllers {
             return View(model);
 
         }
-
-
-
-
-
 
     }
 }
