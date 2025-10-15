@@ -1,22 +1,22 @@
-﻿@model UserToReturnDto
+﻿@model RoleToReturnDto
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit Employee</h1>
+<h1>Edit Role</h1>
 
 <br />
 <br />
 
 <form asp-action="Edit">
 
-	<partial name="UserPartialView/_CreateEditPartialView" />
+	<partial name="RolePartialView/_CreateEditPartialView" />
 
-	<div class="my-3">
+		<a asp-action="AddOrRemoveUsers" asp-route-roleId="@Model.Id" class="btn btn-success">Add or remove user</a>
+
 		<input type="submit" value="Save" class="btn btn-primary" />
 		<a asp-action="Index" class="btn btn-light">Back to list</a>
-	</div>
 
 </form>
 

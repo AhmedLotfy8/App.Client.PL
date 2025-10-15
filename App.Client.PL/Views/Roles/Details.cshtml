@@ -1,4 +1,4 @@
-﻿@model UserToReturnDto
+﻿@model RoleToReturnDto
 
 @{
     ViewData["Title"] = "Details";
@@ -11,7 +11,7 @@
 
 <div>
 
-	<partial name="UserPartialView/_DeleteDetailsPartialView" />
+	<partial name="RolePartialView/_DeleteDetailsPartialView" />
 
 	<div class="my-3">
 		<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning" >Edit</a>
