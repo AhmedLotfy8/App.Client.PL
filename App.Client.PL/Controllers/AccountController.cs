@@ -74,7 +74,6 @@ namespace App.Client.PL.Controllers {
         #endregion
 
 
-
         #region SignIn
 
 
@@ -142,11 +141,7 @@ namespace App.Client.PL.Controllers {
 
                 if (user is not null) {
 
-
-
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-                    //                https://localhost:44382/Account/SignIn
 
                     var url = Url.Action("ResetPassword", "Account", new { email = model.Email, token }, Request.Scheme);
 
@@ -161,7 +156,6 @@ namespace App.Client.PL.Controllers {
                     if (flag) {
 
                         return RedirectToAction("CheckYourInbox");
-
 
                     }
 

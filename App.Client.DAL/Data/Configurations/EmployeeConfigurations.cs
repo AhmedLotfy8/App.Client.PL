@@ -11,7 +11,10 @@ namespace App.Client.DAL.Data.Configurations {
     public class EmployeeConfigurations : IEntityTypeConfiguration<Employee> {
         public void Configure(EntityTypeBuilder<Employee> builder) {
 
-            builder.Property(e => e.Salary).HasColumnType("decimal(18,2)");
+
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! old code !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //builder.Property(e => e.Salary).HasColumnType("decimal(18,2)");
+
 
             builder.HasOne(e => e.Department)
                 .WithMany(d => d.Employees)
