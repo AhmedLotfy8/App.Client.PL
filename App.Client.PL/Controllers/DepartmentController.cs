@@ -8,13 +8,8 @@ using System.Threading.Tasks;
 namespace App.Client.PL.Controllers {
 
     [Authorize]
-    public class DepartmentController : Controller {
+    public class DepartmentController(IUnitOfWork _unitOfWork) : Controller {
 
-        private readonly IUnitOfWork _unitOfWork;
-
-        public DepartmentController(IUnitOfWork unitOfWork) {
-            _unitOfWork = unitOfWork;
-        }
 
         [HttpGet]
         public async Task<IActionResult> Index() {
@@ -103,25 +98,59 @@ namespace App.Client.PL.Controllers {
             return await Details(id, "Delete");
         }
 
+        #region MyRegion
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Delete([FromRoute] int id, Department model) {
+
+
+        //    if (ModelState.IsValid) {
+
+        //        if (id != model.Id) return BadRequest();
+
+        //        _unitOfWork.DepartmentRespository.Delete(model);
+        //        var count = await _unitOfWork.CompleteAsync();
+
+        //        if (count > 0) {
+        //            return RedirectToAction(nameof(Index));
+        //        }
+
+        //    }
+
+        //    return View(model);
+
+        //} 
+        #endregion
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete([FromRoute] int id, Department model) {
+        public async Task<IActionResult> Delete([FromRoute] int id, UpdateDepartmentDto departmentDto) {
 
 
             if (ModelState.IsValid) {
 
-                if (id != model.Id) return BadRequest();
+                if (id != departmentDto.Id) return BadRequest();
 
-                _unitOfWork.DepartmentRespository.Delete(model);
+                var department = new Department() {
+
+                    Id = id,
+                    Code = departmentDto.Code,
+                    Name = departmentDto.Name,
+                    CreateAt = departmentDto.CreateAt,
+
+                };
+
+                _unitOfWork.DepartmentRespository.Delete(department);
                 var count = await _unitOfWork.CompleteAsync();
 
                 if (count > 0) {
-                    return Redirect(nameof(Index));
+                    return RedirectToAction(nameof(Index));
                 }
 
             }
 
-            return View(model);
+            return View(departmentDto);
 
         }
 
