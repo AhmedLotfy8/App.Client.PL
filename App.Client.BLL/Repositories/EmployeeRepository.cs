@@ -17,7 +17,14 @@ namespace App.Client.BLL.Repositories {
         }
 
         public async Task<List<Employee>> GetByNameAsync(string name) {
-            return await _context.Employees.Include(e => e.Department).Where(e => e.Name.Contains(name.ToLower())).ToListAsync();
+
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! old code !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //return await _context.Employees.Include(e => e.Department).Where(e => e.Name.Contains(name.ToLower())).ToListAsync();
+
+
+            return await _context.Employees.Include(e => e.Department).Where(e => e.Name.ToLower().Contains(name.ToLower())).ToListAsync();
+
+
         }
     }
 }

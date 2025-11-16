@@ -70,22 +70,29 @@ namespace App.Client.PL.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([FromRoute] int id, Department model) {
+        public async Task<IActionResult> Edit([FromRoute] int id, UpdateDepartmentDto departmentDto) {
+
+            if (id != departmentDto.Id) return BadRequest();
 
             if (ModelState.IsValid) {
 
-                if (id != model.Id) return BadRequest();
+                var department = new Department() {
+                    Id = id,
+                    Code = departmentDto.Code,
+                    Name = departmentDto.Name,
+                    CreateAt = departmentDto.CreateAt
+                };
 
-                _unitOfWork.DepartmentRespository.Update(model);
+                _unitOfWork.DepartmentRespository.Update(department);
                 var count = await _unitOfWork.CompleteAsync();
 
                 if (count > 0) {
-                    return Redirect(nameof(Index));
+                    return RedirectToAction(nameof(Index));
                 }
 
             }
 
-            return View(model);
+            return View(departmentDto);
 
         }
 

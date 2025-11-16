@@ -19,7 +19,7 @@ namespace App.Client.PL.Controllers {
 
 
         [HttpGet]
-        public async Task<IActionResult> fIndex(string? SearchInput) {
+        public async Task<IActionResult> Index(string? SearchInput) {
 
             IEnumerable<RoleToReturnDto> roles;
 

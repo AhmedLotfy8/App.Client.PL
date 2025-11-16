@@ -7,7 +7,7 @@ namespace App.Client.PL.Mapping {
 
         public EmployeeProfile() {
 
-            CreateMap<CreateEmployeeDto, Employee>().ReverseMap();
+            CreateMap<CreateEmployeeDto, Employee>();
             CreateMap<Employee, CreateEmployeeDto>();
                 //.ForMember(d => d.DepartmentName,
                 //o => o.MapFrom(s => s.Department.Name));
