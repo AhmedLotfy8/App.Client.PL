@@ -22,7 +22,6 @@ namespace App.Client.PL.Mapping {
             //.ForMember(e => e.EmpName, o =>
             //o.MapFrom(s => s.Name));
 
-
         }
 
     }

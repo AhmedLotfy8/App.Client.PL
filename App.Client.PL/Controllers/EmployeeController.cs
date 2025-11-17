@@ -67,8 +67,6 @@ namespace App.Client.PL.Controllers {
 
                 if (count > 0) {
 
-                    TempData["Message"] = "Employee is Created!";
-
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -76,6 +74,7 @@ namespace App.Client.PL.Controllers {
 
             return View(model);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Details(int? id, string viewName = "Details") {
@@ -94,18 +93,6 @@ namespace App.Client.PL.Controllers {
         [HttpGet]
         public async Task<IActionResult> Edit(int? id) {
 
-            // !!!!!!!!!!!!!!!!!!!!! Old Code !!!!!!!!!!!!!!!!!!!!!
-
-            //if (id is null) return BadRequest("Invalid Id");
-            //var employee = await _unitOfWork.EmployeeRespository.GetAsync(id.Value);
-            //var departments = await _unitOfWork.DepartmentRespository.GetAllAsync();
-            //ViewData["departments"] = departments;
-            //if (employee == null) return NotFound(new { StatusCode = 404, message = $"Department with :{id} id is not found" });
-            //var dto = _mapper.Map<CreateEmployeeDto>(employee);
-            //return View(dto);
-
-
-
             var departments = await _unitOfWork.DepartmentRespository.GetAllAsync();
             ViewData["departments"] = departments;
             return await Details(id, "Edit");
@@ -114,7 +101,7 @@ namespace App.Client.PL.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([FromRoute] int id, CreateEmployeeDto model) {
+        public async Task<IActionResult> Edit([FromRoute] int id, CreateEmployeeDto model, string viewName = "Edit") {
 
 
             if (ModelState.IsValid) {
@@ -125,9 +112,9 @@ namespace App.Client.PL.Controllers {
 
                 }
 
-                if (model.ImageName is not null) {
-                    model.ImageName = DocumentSettings.UploadFile(model.Image, "Images");
+                if (model.Image is not null) {
 
+                    model.ImageName = DocumentSettings.UploadFile(model.Image, "Images");
                 }
 
                 var employee = _mapper.Map<Employee>(model);
@@ -143,7 +130,7 @@ namespace App.Client.PL.Controllers {
 
             }
 
-            return View(model);
+            return View(viewName, model);
 
         }
 
@@ -187,6 +174,7 @@ namespace App.Client.PL.Controllers {
         }
 
 
+        #region MyRegion
 
         // !!!!!!!!!!!!!!!!!!!!! Old Code !!!!!!!!!!!!!!!!!!!!!
 
@@ -221,6 +209,7 @@ namespace App.Client.PL.Controllers {
 
         //}
 
+        #endregion
 
 
 

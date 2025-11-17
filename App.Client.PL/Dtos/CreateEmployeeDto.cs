@@ -6,6 +6,8 @@ using System.ComponentModel.DataAnnotations;
 namespace App.Client.PL.Dtos {
     public class CreateEmployeeDto {
 
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
 
@@ -37,7 +39,7 @@ namespace App.Client.PL.Dtos {
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
 
 
-        [DisplayName("Department")]  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! new code !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        [DisplayName("Department")]  
 
         public int? DepartmentId { get; set; }
 

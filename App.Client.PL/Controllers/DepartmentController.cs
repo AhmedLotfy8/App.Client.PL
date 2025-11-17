@@ -17,10 +17,12 @@ namespace App.Client.PL.Controllers {
             return View(departments);
         }
 
+
         [HttpGet]
         public IActionResult Create() {
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateDepartmentDto model) {
@@ -44,6 +46,7 @@ namespace App.Client.PL.Controllers {
             return View(model);
         }
 
+
         [HttpGet]
         public async Task<IActionResult> Details(int? id, string viewName = "Details") {
 
@@ -57,11 +60,13 @@ namespace App.Client.PL.Controllers {
 
         }
 
+
         [HttpGet]
         public async Task<IActionResult> Edit(int? id) {
 
             return await Details(id, "Edit");
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -97,30 +102,6 @@ namespace App.Client.PL.Controllers {
 
             return await Details(id, "Delete");
         }
-
-        #region MyRegion
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Delete([FromRoute] int id, Department model) {
-
-
-        //    if (ModelState.IsValid) {
-
-        //        if (id != model.Id) return BadRequest();
-
-        //        _unitOfWork.DepartmentRespository.Delete(model);
-        //        var count = await _unitOfWork.CompleteAsync();
-
-        //        if (count > 0) {
-        //            return RedirectToAction(nameof(Index));
-        //        }
-
-        //    }
-
-        //    return View(model);
-
-        //} 
-        #endregion
 
 
         [HttpPost]
